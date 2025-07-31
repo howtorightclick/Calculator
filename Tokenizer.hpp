@@ -1,20 +1,28 @@
 #ifndef TOKENIZER_HPP
 #define TOKENIZER_HPP
 
-#include "Node.hpp"
 #include <string>
+
 #include "Token.hpp"
+#include "FunctionToken.hpp"
+#include "NumberToken.hpp"
+#include "OperatorToken.hpp"
 
 class Tokenizer {
 public:
-    // Tokenize input string and return a vector of tokens
-    std::vector<TokenType> tokenize(std::string &input);
+    Tokenizer();
 
+    // Tokenize input string and return a vector of tokens
+    std::vector<Token> tokenize(std::string &input);
+
+    void printTokens();
 private:
     // Finds the matching right bracket and returns its index
-    int tokenizeNumber(std::vector<TokenType> &tokens, std::string &input, int curr);
+    int tokenizeNumber(std::string &input, int &curr);
 
-    int findMatchingRightBracket(std::string &input, std::vector<int> &bracketMatch, int curr);
+    //int findMatchingRightBracket(std::string &input, std::vector<int> &bracketMatch, int curr);
+
+    std::vector<Token> tokens;
 };
 
 #endif

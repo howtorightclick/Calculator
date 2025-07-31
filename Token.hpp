@@ -3,31 +3,32 @@
 
 #include "Node.hpp"
 
-enum TokenType {
+enum Function {
     SIN,
     COS,
     TAN,
     COTAN,
-    SINH,
-    COSH,
     TANH,
+    SINH,
+    COSH
+};
+
+enum TokenType {
+    FUNCTION,
     LBRACKET,
     RBRACKET,
-    INTEGER,
-    DECIMAL,
+    NUMBER,
     DOTPRODUCT,
-    ADDITION,
-    DIVISION,
-    MULTIPLICATION,
-    SUBTRACTION
+    OPERATOR
 };
 
 class Token {
 public:
     virtual Node *toNode() = 0;
-    virtual bool isOperator() = 0;
-    virtual bool isFunction() = 0;
-private:
+
+    virtual TokenType getType() = 0;
+
+    virtual void printToken() = 0;
 };
 
 #endif
