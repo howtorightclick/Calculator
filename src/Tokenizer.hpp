@@ -13,7 +13,7 @@ public:
     Tokenizer();
 
     // Tokenize input string and return a vector of tokens
-    std::vector<Token> tokenize(std::string &input);
+    void tokenize(std::string &input);
 
     void printTokens();
 private:

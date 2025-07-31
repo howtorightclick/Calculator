@@ -8,7 +8,7 @@ Tokenizer::Tokenizer() {
 
 }
 
-std::vector<Token> Tokenizer::tokenize(std::string &input) {
+void Tokenizer::tokenize(std::string &input) {
     TokenType prev = NUMBER;
 
     for (int i = 0; i < input.length(); i++) {
