@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "Calculator.hpp"
 #include "Tokenizer.hpp"
 
@@ -7,7 +9,13 @@ int main(int argc, char* argv[]) {
     }
     
     Tokenizer tokenizer = Tokenizer();
-    std::string equation = argv[1];
-    tokenizer.tokenize(equation);
 
+    std::string input;
+    std::cin >> input;
+
+    tokenizer.tokenize(input);
+
+    tokenizer.printTokens();
+
+    return 0;
 }
