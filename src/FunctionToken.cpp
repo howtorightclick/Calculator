@@ -4,10 +4,10 @@ FunctionToken::FunctionToken(Function function) {
     FunctionToken::function = function;
 }
 
-Node *FunctionToken::toNode() {
+/*Node *FunctionToken::toNode() {
     // TODO: convert token into node
     return nullptr;
-}
+}*/
 
 TokenType FunctionToken::getType() {
     return FUNCTION;

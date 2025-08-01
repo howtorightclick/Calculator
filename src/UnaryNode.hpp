@@ -2,14 +2,14 @@
 #define UNARYNODE_HPP
 
 #include "Node.hpp"
-#include "Operators.hpp"
+#include "OperatorToken.hpp"
 
 class UnaryNode : public Node {
 public:
     float calculate();
     
 private:
-    UnaryOperator op;
+    OperatorToken op;
     Node *a;
 };
 

@@ -2,11 +2,11 @@
 #define INFIXOPNODE_HPP
 
 #include "Node.hpp"
-#include "Operators.hpp"
+#include "OperatorToken.hpp"
 
 class InfixOpNode : public Node {
 public:
-    InfixOpNode(InfixOperator op);
+    InfixOpNode(OperatorToken op);
 
     float calculate();
     
@@ -14,7 +14,7 @@ public:
 
     void insertB(Node *b);
 private:
-    InfixOperator op_;
+    OperatorToken op_;
     Node *a_;
     Node *b_;
 };

@@ -1,6 +1,6 @@
 #include "InfixOpNode.hpp"
 
-InfixOpNode::InfixOpNode(InfixOperator op): 
+InfixOpNode::InfixOpNode(OperatorToken op): 
     op_ (op),
     a_ (nullptr),
     b_ (nullptr)
