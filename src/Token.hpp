@@ -1,7 +1,7 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
 
-#include "Node.hpp"
+//#include "Node.hpp"
 
 enum Function {
     SIN,
@@ -24,7 +24,7 @@ enum TokenType {
 
 class Token {
 public:
-    virtual Node *toNode() = 0;
+    //virtual Node *toNode() = 0;
 
     virtual TokenType getType() = 0;
 

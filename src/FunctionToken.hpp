@@ -9,7 +9,7 @@ class FunctionToken : public Token {
 public:
     FunctionToken(Function function);
 
-    Node *toNode();
+    //Node *toNode();
 
     TokenType getType();
 

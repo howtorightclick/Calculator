@@ -6,10 +6,10 @@ OperatorToken::OperatorToken(char val) {
     OperatorToken::val = val;
 }
 
-Node *OperatorToken::toNode() {
+/*Node *OperatorToken::toNode() {
     // TODO: Convert token to node
     return nullptr;
-}
+}*/
 
 TokenType OperatorToken::getType() {
     return OPERATOR;

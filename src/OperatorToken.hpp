@@ -7,7 +7,7 @@ class OperatorToken : public Token {
 public:
     OperatorToken(char val);
 
-    Node *toNode();
+   //Node *toNode();
 
     TokenType getType();
 

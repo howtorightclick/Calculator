@@ -7,7 +7,7 @@ class NumberToken : public Token {
 public:
     NumberToken(float val);
 
-    Node *toNode();
+    //Node *toNode();
 
     TokenType getType();
 

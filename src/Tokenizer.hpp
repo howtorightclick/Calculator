@@ -1,7 +1,9 @@
 #ifndef TOKENIZER_HPP
 #define TOKENIZER_HPP
 
+#include <vector>
 #include <string>
+#include <memory>
 
 #include "Token.hpp"
 #include "FunctionToken.hpp"
@@ -22,7 +24,7 @@ private:
 
     //int findMatchingRightBracket(std::string &input, std::vector<int> &bracketMatch, int curr);
 
-    std::vector<Token> tokens;
+    std::vector<std::shared_ptr<Token>> tokens;
 };
 
 #endif

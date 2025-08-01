@@ -1,6 +1,7 @@
 #include <vector>
 #include <cmath>
 #include <iostream>
+#include <memory>
 
 #include "Tokenizer.hpp"
 
@@ -55,14 +56,13 @@ int Tokenizer::tokenizeNumber(std::string &input, int &curr) {
         index++;
     }
 
-    NumberToken token = NumberToken(res);
-    tokens.push_back(token);
+    tokens.push_back(std::make_shared<NumberToken>(res));
     return index; 
 }
 
 void Tokenizer::printTokens() {
     for (auto &token: tokens) {
-        token.printToken();
+        token->printToken();
         std::cout << " | ";
     }
 
