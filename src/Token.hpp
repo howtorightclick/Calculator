@@ -1,7 +1,11 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
 
+#include <set>
+
 //#include "Node.hpp"
+
+inline constexpr char OPERATORS[5] = {'+', '-', '/', '*', '^'};
 
 enum Function {
     SIN,
