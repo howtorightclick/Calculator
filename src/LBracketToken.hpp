@@ -14,6 +14,8 @@ public:
     void printToken();
 
     void setRightBracket(int i);
+
+    std::expected<std::unique_ptr<Node>, std::string> parseToken(Parser &parser);
 private:
     int rightBracket;
 };
