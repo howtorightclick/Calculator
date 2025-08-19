@@ -1,18 +1,15 @@
 #include "InfixOpNode.hpp"
 
-InfixOpNode::InfixOpNode(OperatorToken op): 
-    op_ (op),
-    a_ (nullptr),
-    b_ (nullptr)
+InfixOpNode::InfixOpNode(char op_): 
+    op (op_)
 {
 }
 
-void InfixOpNode::insertA(Node *a) {
-    a_ = a;
-}
-
-void InfixOpNode::insertB(Node *b) {
-    b_ = b;
+InfixOpNode::InfixOpNode(char op_, std::unique_ptr<Node> a_, std::unique_ptr<Node> b_): 
+    op (op_)
+{
+    a = std::move(a_);
+    b = std::move(b_);
 }
 
 float InfixOpNode::calculate() {

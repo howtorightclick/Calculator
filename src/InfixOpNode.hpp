@@ -6,17 +6,15 @@
 
 class InfixOpNode : public Node {
 public:
-    InfixOpNode(OperatorToken op);
+    InfixOpNode(char op_);
+
+    InfixOpNode(char op_, std::unique_ptr<Node> a_, std::unique_ptr<Node> b_);
 
     float calculate();
-    
-    void insertA(Node *a);
-
-    void insertB(Node *b);
 private:
-    OperatorToken op_;
-    Node *a_;
-    Node *b_;
+    char op;
+    std::unique_ptr<Node> a;
+    std::unique_ptr<Node> b;
 };
 
 #endif
