@@ -7,15 +7,16 @@
 
 class FunctionToken : public Token {
 public:
-    FunctionToken(Function function);
+    FunctionToken(std::string function);
 
     //Node *toNode();
 
     TokenType getType();
 
     void printToken();
-private:
-    Function function;
-};
 
+    std::expected<std::unique_ptr<Node>, std::string> parseToken(Parser &parser);
+private:
+    std::string function;
+};
 #endif

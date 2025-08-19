@@ -1,7 +1,9 @@
 #include <iostream>
-#include "FunctionToken.hpp"
 
-FunctionToken::FunctionToken(Function function) {
+#include "FunctionToken.hpp"
+#include "UnaryNode.hpp"
+
+FunctionToken::FunctionToken(std::string function) {
     FunctionToken::function = function;
 }
 
@@ -15,17 +17,16 @@ TokenType FunctionToken::getType() {
 }
 
 void FunctionToken::printToken() {
-    if (function == SIN) {
-        std::cout << "SIN";
-    } else if (function == COS) {
-        std::cout << "cos";
-    } else if (function == TAN) {
-        std::cout << "tan";
-    } else if (function == SINH) {
-        std::cout << "sinh";
-    } else if (function == COSH) {
-        std::cout << "cosh";
-    } else if (function == TANH) {
-        std::cout << "tanh";
+    std::cout << function;
+}
+
+std::expected<std::unique_ptr<Node>, std::string> FunctionToken::parseToken(Parser &parser) {
+
+    Token *prev = parser.getPrev();
+    TokenType prevType = prev->getType();
+    if (prevType != OPERATOR && prevType != LBRACKET && !parser.isFirst()) {
+        return std::unexpected("Parser Error: Previous token cannot be a right bracket or number");
     }
+
+    return std::make_unique<UnaryNode>(function);
 }
