@@ -5,6 +5,8 @@
 
 class FloatNode : public Node {
 public:
+    FloatNode(float val);
+
     float calculate();
     
 private:
