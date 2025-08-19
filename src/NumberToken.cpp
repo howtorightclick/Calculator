@@ -1,6 +1,8 @@
 #include<iostream>
+#include<memory>
 
 #include "NumberToken.hpp"
+#include "FloatNode.hpp"
 
 NumberToken::NumberToken(float val) {
     NumberToken::val = val;
@@ -17,4 +19,11 @@ TokenType NumberToken::getType() {
 
 void NumberToken::printToken() {
     std::cout << val;
+}
+
+std::expected<std::unique_ptr<Node>, std::string> NumberToken::parseToken(Parser &parser) {
+    parser.advanceToken();
+    std::unique_ptr<Node> newNode = std::make_unique<FloatNode>(val);
+    
+    return parser.getNext()->parseToken(parser);
 }

@@ -12,6 +12,8 @@ public:
     TokenType getType();
 
     void printToken();
+
+    std::expected<std::unique_ptr<Node>, std::string> parseToken(Parser &parser);
 private:
     char val;
 };
