@@ -13,10 +13,8 @@ Tokenizer::Tokenizer() {
 }
 
 std::expected<int, std::string> Tokenizer::tokenize(std::string &input) {
-    std::set<char> operators = {};
     int i = 0;
     while (i < input.length()) {
-        std::cout << i << std::endl;
         if (isdigit(input[i])) {
             auto result = tokenizeNumber(input, i);
             if (result) {
@@ -46,6 +44,8 @@ std::expected<int, std::string> Tokenizer::tokenize(std::string &input) {
             std::unexpected("Syntax error: Unexpected symbol");
         }
     }
+
+    tokens = toPostFix(tokens);
 
     return 0;
 }
@@ -79,7 +79,17 @@ std::expected<int, std::string> Tokenizer::tokenizeNumber(const std::string &inp
 }
 
 int Tokenizer::tokenizeOperator(const std::string &input, const int curr) {
-    tokens.push_back(std::make_shared<OperatorToken>(input[curr]));
+    bool isUnary = true;
+    char prev = input[curr - 1];
+    if (curr != 0 && isdigit(prev) && prev != ')') {
+        isUnary = false;
+    }
+    
+    if (input[curr] == '-') {
+        tokens.push_back(std::make_shared<OperatorToken>(input[curr], isUnary));
+    }
+
+    tokens.push_back(std::make_shared<OperatorToken>(input[curr], false));
 
     return curr + 1;
 }
@@ -102,24 +112,13 @@ std::expected<int, std::string> Tokenizer::tokenizeFunction(const std::string &i
         return std::unexpected("Syntax error: Missing bracket after function");
     }
 
-    Function func;
-    if (buffer == "sin") {
-        func = SIN;
-    } else if (buffer == "cos") {
-        func = COS;
-    } else if (buffer == "tan") {
-        func = TAN;
-    } else if (buffer == "sinh") {
-        func = SINH;
-    } else if (buffer == "cosh") {
-        func = COSH;
-    } else if (buffer == "tanh") {
-        func = TANH;
+    auto it = std::find(std::begin(STANDARD_SYMBOLS::FUNCTIONS), std::end(STANDARD_SYMBOLS::FUNCTIONS), buffer);
+
+    if (it != std::end(STANDARD_SYMBOLS::FUNCTIONS)) {
+        tokens.push_back(std::make_shared<FunctionToken>(buffer));
     } else {
         return std::unexpected("Syntax error: Unknown function");
     }
-
-    tokens.push_back(std::make_shared<FunctionToken>(func));
 
     return i;
 }
@@ -151,6 +150,50 @@ void Tokenizer::printTokens() {
     std::cout << '\n';
 }
 
+std::vector<std::shared_ptr<Token>> Tokenizer::toPostFix(std::vector<std::shared_ptr<Token>> &tokens){
+    std::queue<std::shared_ptr<Token>> stack;
+    std::vector<std::shared_ptr<Token>> result;
+    for (int i = 0; i < tokens.size(); i++) {
+        std::shared_ptr<Token> currToken = tokens[i];
+        TokenType tokenType = currToken->getType();
+
+        switch (tokenType)
+        {
+        case NUMBER:
+            result.push_back(currToken);
+            /* code */
+            break;
+        case LBRACKET:
+            stack.push(currToken);
+            break;
+        case RBRACKET:
+            while (stack.front()->getType() != LBRACKET) {
+                result.push_back(stack.front());
+                stack.pop();
+            }
+            stack.pop();
+            break;
+        case FUNCTION:
+        case OPERATOR:
+            std::cout << currToken->getPrecedence() << std::endl;
+            while (!stack.empty() && currToken->getPrecedence() <= stack.front()->getPrecedence())
+            {
+                result.push_back(currToken);
+                stack.pop();
+            }
+            stack.push(currToken);
+            break;
+        }
+    }
+
+    while (!stack.empty()) {
+        result.push_back(stack.front());
+        stack.pop();
+    }
+
+    return result;
+}
+
 bool Tokenizer::isOperator(char c) {
-    return std::find(OPERATORS, OPERATORS + 5, c) != OPERATORS + 5;
+    return std::find(std::begin(STANDARD_SYMBOLS::OPERATORS), std::end(STANDARD_SYMBOLS::OPERATORS), c) != std::end(STANDARD_SYMBOLS::OPERATORS);
 }

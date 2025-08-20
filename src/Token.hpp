@@ -6,7 +6,6 @@
 #include <expected>
 
 #include "Node.hpp"
-#include "Parser.hpp"
 
 //#include "Node.hpp"
 namespace STANDARD_SYMBOLS {
@@ -23,17 +22,6 @@ namespace STANDARD_SYMBOLS {
         "tanh"
     };
 }
-
-
-enum Function {
-    SIN,
-    COS,
-    TAN,
-    COTAN,
-    TANH,
-    SINH,
-    COSH
-};
 
 enum TokenType {
     FUNCTION,
@@ -55,7 +43,7 @@ public:
 
     virtual int getPrecedence() = 0;
 
-    virtual std::expected<std::unique_ptr<Node>, std::string> parseToken(Parser &parser) = 0;
+    virtual std::expected<std::unique_ptr<Node>, std::string> parseToken() = 0;
 };
 
 #endif

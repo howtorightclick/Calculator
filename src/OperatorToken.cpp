@@ -3,8 +3,10 @@
 #include "OperatorToken.hpp"
 #include "InfixOpNode.hpp"
 
-OperatorToken::OperatorToken(char val) {
-    OperatorToken::val = val;
+OperatorToken::OperatorToken(char _val, bool _unary):
+val (_val),
+isUnary (_unary)
+{
 }
 
 /*Node *OperatorToken::toNode() {
@@ -26,16 +28,19 @@ int OperatorToken::getPrecedence() {
     case '^':
         return 3;
     case '*':
-        return 2;
     case '/':
         return 2;
     case '+':
         return 1;
     case '-':
+        if (isUnary)
+        {
+            return 4;
+        }
         return 1;
     }
 }
 
-std::expected<std::unique_ptr<Node>, std::string> OperatorToken::parseToken(Parser &parser) {
+std::expected<std::unique_ptr<Node>, std::string> OperatorToken::parseToken() {
     return nullptr;
 }

@@ -4,6 +4,7 @@
 class Node {
 public:
     virtual float calculate() = 0;    
+
 private:
 
 };

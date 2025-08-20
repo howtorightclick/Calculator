@@ -15,7 +15,7 @@ public:
 
     int getPrecedence();
 
-    std::expected<std::unique_ptr<Node>, std::string> parseToken(Parser &parser);
+    std::expected<std::unique_ptr<Node>, std::string> parseToken();
 private:
     float val;
 };

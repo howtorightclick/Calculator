@@ -13,7 +13,7 @@ class Parser {
 public:
     Parser();
 
-    std::expected<std::unique_ptr<Node>, std::string> parseTokens();
+    std::expected<std::unique_ptr<Node>, std::string> parseTokens(std::queue<std::unique_ptr<Node>> stack);
 
     std::expected<std::unique_ptr<Node>, std::string> parseTokens(size_t end);
 
@@ -37,6 +37,10 @@ public:
 
     // Returns true if the current token is the first token in the sequence
     bool isFirst();
+
+    void pushStack(std::unique_ptr<Node> node);
+
+    std::unique_ptr<Node> popStack();
 
 private:
     std::vector<std::shared_ptr<Token>> tokens;

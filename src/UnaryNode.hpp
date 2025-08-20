@@ -1,16 +1,18 @@
 #ifndef UNARYNODE_HPP
 #define UNARYNODE_HPP
 
+#include <string>
+
 #include "Node.hpp"
-#include "OperatorToken.hpp"
 
 class UnaryNode : public Node {
 public:
     float calculate();
+
+    UnaryNode(std::string func);
     
 private:
-    OperatorToken op;
-    Node *a;
+    std::string func;
 };
 
 #endif

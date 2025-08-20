@@ -13,6 +13,10 @@ set(TARGET_SRC
     src/OperatorToken.cpp
     src/LBracketToken.cpp
     src/RBracketToken.cpp
+    src/UnaryNode.cpp
+    src/InfixOpNode.cpp
+    src/FloatNode.cpp
+    src/Parser.cpp
     )
 
 set(TARGET_H
@@ -23,6 +27,11 @@ set(TARGET_H
     src/OperatorToken.hpp
     src/LBracketToken.hpp
     src/RBracketToken.hpp
+    src/UnaryNode.hpp
+    src/InfixOpNode.hpp
+    src/FloatNode.hpp
+    src/Node.hpp
+    src/Parser.hpp
 )
 
 add_executable(Calculator ${TARGET_SRC} ${TARGET_H})

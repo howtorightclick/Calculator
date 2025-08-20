@@ -47,6 +47,13 @@
         "streambuf": "cpp",
         "text_encoding": "cpp",
         "typeinfo": "cpp",
-        "variant": "cpp"
-    }
+        "variant": "cpp",
+        "iostream": "cpp",
+        "istream": "cpp",
+        "set": "cpp",
+        "expected": "cpp",
+        "print": "cpp",
+        "unordered_set": "cpp"
+    },
+    "C_Cpp.default.compilerPath": "C:/msys64/ucrt64/bin/gcc.exe"
 }

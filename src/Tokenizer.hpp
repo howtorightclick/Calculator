@@ -48,6 +48,9 @@ private:
     // Returns the new index.
     int tokenizeLeftBracket(const std::string &input, const int curr);
 
+    /// @brief Converts the token vector into postfix order.
+    std::vector<std::shared_ptr<Token>> toPostFix(std::vector<std::shared_ptr<Token>> &tokens);
+
     std::expected<int, std::string> tokenizeRightBracket(const std::string &input, const int curr);
 
     std::vector<std::shared_ptr<Token>> tokens;

@@ -5,7 +5,7 @@
 
 class OperatorToken : public Token {
 public:
-    OperatorToken(char val);
+    OperatorToken(char _val, bool _unary);
 
    //Node *toNode();
 
@@ -15,9 +15,10 @@ public:
 
     int getPrecedence();
 
-    std::expected<std::unique_ptr<Node>, std::string> parseToken(Parser &parser);
+    std::expected<std::unique_ptr<Node>, std::string> parseToken();
 private:
     char val;
+    bool isUnary;
 };
 
 #endif
