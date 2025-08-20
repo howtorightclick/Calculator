@@ -53,6 +53,8 @@ public:
 
     virtual void printToken() = 0;
 
+    virtual int getPrecedence() = 0;
+
     virtual std::expected<std::unique_ptr<Node>, std::string> parseToken(Parser &parser) = 0;
 };
 
