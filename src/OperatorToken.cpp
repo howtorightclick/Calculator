@@ -20,10 +20,22 @@ void OperatorToken::printToken() {
     std::cout << val;
 }
 
+int OperatorToken::getPrecedence() {
+    switch (val)
+    {
+    case '^':
+        return 3;
+    case '*':
+        return 2;
+    case '/':
+        return 2;
+    case '+':
+        return 1;
+    case '-':
+        return 1;
+    }
+}
+
 std::expected<std::unique_ptr<Node>, std::string> OperatorToken::parseToken(Parser &parser) {
-    parser.advanceToken();
-
-    // TODO: Error checking
-
-    return std::make_unique<InfixOpNode>(val);
+    return nullptr;
 }

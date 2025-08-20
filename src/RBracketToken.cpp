@@ -18,11 +18,11 @@ void RBracketToken::printToken() {
     std::cout << ")";
 }
 
+int RBracketToken::getPrecedence() {
+    return 0;
+}
+
 std::expected<std::unique_ptr<Node>, std::string> RBracketToken::parseToken(Parser &parser) {
 
-
-
-    
-    parser.advanceToken();
     return nullptr;
 }

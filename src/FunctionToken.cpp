@@ -20,13 +20,10 @@ void FunctionToken::printToken() {
     std::cout << function;
 }
 
+int FunctionToken::getPrecedence() {
+    return 4;
+}
+
 std::expected<std::unique_ptr<Node>, std::string> FunctionToken::parseToken(Parser &parser) {
 
-    Token *prev = parser.getPrev();
-    TokenType prevType = prev->getType();
-    if (prevType != OPERATOR && prevType != LBRACKET && !parser.isFirst()) {
-        return std::unexpected("Parser Error: Previous token cannot be a right bracket or number");
-    }
-
-    return std::make_unique<UnaryNode>(function);
 }

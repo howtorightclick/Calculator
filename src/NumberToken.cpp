@@ -21,9 +21,10 @@ void NumberToken::printToken() {
     std::cout << val;
 }
 
+int NumberToken::getPrecedence() {
+    return -1;
+}
+
 std::expected<std::unique_ptr<Node>, std::string> NumberToken::parseToken(Parser &parser) {
-    parser.advanceToken();
-    std::unique_ptr<Node> newNode = std::make_unique<FloatNode>(val);
-    
-    return parser.getNext()->parseToken(parser);
+
 }
