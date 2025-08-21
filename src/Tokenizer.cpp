@@ -81,15 +81,11 @@ std::expected<int, std::string> Tokenizer::tokenizeNumber(const std::string &inp
 int Tokenizer::tokenizeOperator(const std::string &input, const int curr) {
     bool isUnary = true;
     char prev = input[curr - 1];
-    if (curr != 0 && isdigit(prev) && prev != ')') {
+    if (curr != 0 && isdigit(prev) && prev != ')' && input[curr] != '-') {
         isUnary = false;
     }
     
-    if (input[curr] == '-') {
-        tokens.push_back(std::make_shared<OperatorToken>(input[curr], isUnary));
-    }
-
-    tokens.push_back(std::make_shared<OperatorToken>(input[curr], false));
+    tokens.push_back(std::make_shared<OperatorToken>(input[curr], isUnary));
 
     return curr + 1;
 }
@@ -175,7 +171,6 @@ std::vector<std::shared_ptr<Token>> Tokenizer::toPostFix(std::vector<std::shared
             break;
         case FUNCTION:
         case OPERATOR:
-            std::cout << currToken->getPrecedence() << std::endl;
             while (!stack.empty() && currToken->getPrecedence() <= stack.front()->getPrecedence())
             {
                 result.push_back(currToken);
