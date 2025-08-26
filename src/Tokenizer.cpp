@@ -12,181 +12,108 @@ Tokenizer::Tokenizer() {
 
 }
 
-std::expected<int, std::string> Tokenizer::tokenize(std::string &input) {
-    int i = 0;
-    while (i < input.length()) {
-        if (isdigit(input[i])) {
-            auto result = tokenizeNumber(input, i);
-            if (result) {
-                i = result.value();
-            } else {
-                return result;
+std::expected<Tokenizer::TokenizedExpression, std::string> Tokenizer::tokenize(std::string &input) {
+    TokenType prev = NUMBER;
+    // Read until space or operator
+    Tokenizer::TokenizedExpression expression;
+    std::vector<std::string> tokens;
+    std::queue<int> leftBracketStack;
+    std::string buffer;
+    for (int i = 0; i < input.size(); i++) {
+
+        if (input[i] == ' ' || isOperator(input[i]) || input[i] == '(' || input[i] == ')') {
+            auto result = validateBuffer(buffer);
+            if (!result) {
+                return std::unexpected(result.error());
             }
-        } else if (isOperator(input[i])) {
-            i = tokenizeOperator(input, i);
-        } else if (isalpha(input[i])) {
-            auto result = tokenizeFunction(input, i);
-            if (result) {
-                i = result.value();
-            } else {
-                return result;
+
+            if (result.value() == ERROR) {
+                return std::unexpected("Error: unexpected symbol at " + input);
             }
-        } else if (input[i] == '(') {
-            i = tokenizeLeftBracket(input, i);
-        } else if (input[i] == ')') {
-            auto result = tokenizeRightBracket(input, i);
-            if (result) {
-                i = result.value();
-            } else {
-                return result;
+            expression.strings.push_back(buffer);
+            expression.types.push_back(result.value());
+            buffer = "";
+
+            if (input[i] != ' ') {
+                expression.strings.push_back(std::string(1, input[i]));
+                expression.types.push_back(OPERATOR);
+            }
+
+            if (input[i] == '(') {
+                leftBracketStack.push(expression.strings.size() - 1);
+                expression.types.push_back(LBRACKET);
+            } else if (input[i] == ')') {
+                if (leftBracketStack.size() == 0) {
+                    return std::unexpected("Error: unexpected symbol in " + input);
+                }
+                expression.bracketMap[leftBracketStack.front()] = expression.strings.size() - 1;
+                leftBracketStack.pop();
+                expression.types.push_back(RBRACKET);
             }
         } else {
-            std::unexpected("Syntax error: Unexpected symbol");
-        }
-    }
-
-    tokens = toPostFix(tokens);
-
-    return 0;
-}
-
-std::expected<int, std::string> Tokenizer::tokenizeNumber(const std::string &input, int &curr) noexcept {
-    int numDecimalMarkers = 0;
-    int index = curr;
-
-    //float res = 0;
-    std::string buffer = "";
-    while (index < input.length()) {
-        
-        if (isdigit(input[index])) {
-            buffer.push_back(input[index]);
-        } else if (input[index] == '.') {
-            numDecimalMarkers += 1;
-            if (numDecimalMarkers > 1) {
-                return std::unexpected("Syntax error: More than one decimal markers");
-            } else {
-                buffer.push_back(input[index]);
-            }
-            //isDecimal = true;
-        } else {
-            break;
-        }
-        index++;
-    }
-
-    tokens.push_back(std::make_shared<NumberToken>(std::stof(buffer)));
-    return index; 
-}
-
-int Tokenizer::tokenizeOperator(const std::string &input, const int curr) {
-    bool isUnary = true;
-    char prev = input[curr - 1];
-    if (curr != 0 && isdigit(prev) && prev != ')' && input[curr] != '-') {
-        isUnary = false;
-    }
-    
-    tokens.push_back(std::make_shared<OperatorToken>(input[curr], isUnary));
-
-    return curr + 1;
-}
-
-std::expected<int, std::string> Tokenizer::tokenizeFunction(const std::string &input, int &curr) {
-    std::string buffer = "";
-    int i = curr;
-    while (i < input.length()) {
-        if (isalpha(input[i])) {
             buffer.push_back(input[i]);
-        } else {
-            break;
         }
-        i++;
     }
 
-    char next = input[i];
-
-    if (next != '(') {
-        return std::unexpected("Syntax error: Missing bracket after function");
+    if (leftBracketStack.size() != 0) {
+        return std::unexpected("Error: unexpected symbol in " + input);
     }
 
-    auto it = std::find(std::begin(STANDARD_SYMBOLS::FUNCTIONS), std::end(STANDARD_SYMBOLS::FUNCTIONS), buffer);
+    auto result = validateBuffer(buffer);
+    if (!result) {
+        return std::unexpected(result.error());
+    }
+    expression.strings.push_back(buffer);
 
-    if (it != std::end(STANDARD_SYMBOLS::FUNCTIONS)) {
-        tokens.push_back(std::make_shared<FunctionToken>(buffer));
+    return expression;
+}
+
+std::expected<TokenType, std::string> Tokenizer::validateBuffer(std::string &buffer) {
+    if (buffer.size() == 0) {
+        return ERROR;
+    }
+    // Buffer either contains a number or a function
+    if (isdigit(buffer[0])) {
+        int numDecimalPoints = 0;
+        for (int i = 0; i < buffer.size(); i++) {
+            if (buffer[i] == '.') {
+                numDecimalPoints++;
+            } else if (isalpha(buffer[i])) {
+                return std::unexpected("Error: unexpected symbol in \'" + buffer + "\'");
+            }
+
+            if (numDecimalPoints > 1) {
+                return std::unexpected("Error: unexpected numerical constant in \'" + buffer + "\'");
+            }
+        }
+        return NUMBER;
     } else {
-        return std::unexpected("Syntax error: Unknown function");
-    }
+        auto it = std::find(std::begin(STANDARD_SYMBOLS::FUNCTIONS), std::end(STANDARD_SYMBOLS::FUNCTIONS), buffer);
 
-    return i;
-}
-
-int Tokenizer::tokenizeLeftBracket(const std::string &input, const int curr) {
-    tokens.push_back(std::make_shared<LBracketToken>());
-    Tokenizer::leftBrackets.push(tokens.size() - 1);
-    return curr + 1;
-}
-
-std::expected<int, std::string> Tokenizer::tokenizeRightBracket(const std::string &input, const int curr) {
-    if (Tokenizer::leftBrackets.empty()) {
-        return std::unexpected("Syntax error: Mismatched brackets");
-    }
-    
-    int left = Tokenizer::leftBrackets.front();
-    Tokenizer::bracketMap[left] = curr;
-    Tokenizer::leftBrackets.pop();
-    tokens.push_back(std::make_shared<RBracketToken>());
-    return curr + 1;
-}
-
-void Tokenizer::printTokens() {
-    for (auto &token: tokens) {
-        token->printToken();
-        std::cout << " | ";
-    }
-
-    std::cout << '\n';
-}
-
-std::vector<std::shared_ptr<Token>> Tokenizer::toPostFix(std::vector<std::shared_ptr<Token>> &tokens){
-    std::queue<std::shared_ptr<Token>> stack;
-    std::vector<std::shared_ptr<Token>> result;
-    for (int i = 0; i < tokens.size(); i++) {
-        std::shared_ptr<Token> currToken = tokens[i];
-        TokenType tokenType = currToken->getType();
-
-        switch (tokenType)
-        {
-        case NUMBER:
-            result.push_back(currToken);
-            /* code */
-            break;
-        case LBRACKET:
-            stack.push(currToken);
-            break;
-        case RBRACKET:
-            while (stack.front()->getType() != LBRACKET) {
-                result.push_back(stack.front());
-                stack.pop();
-            }
-            stack.pop();
-            break;
-        case FUNCTION:
-        case OPERATOR:
-            while (!stack.empty() && currToken->getPrecedence() <= stack.front()->getPrecedence())
-            {
-                result.push_back(currToken);
-                stack.pop();
-            }
-            stack.push(currToken);
-            break;
+        if (it == std::end(STANDARD_SYMBOLS::FUNCTIONS)) {
+           return std::unexpected("Error: object \'" + buffer + "\' not found");
         }
+
+        return FUNCTION;
     }
 
-    while (!stack.empty()) {
-        result.push_back(stack.front());
-        stack.pop();
+}
+
+std::expected<bool, std::string> Tokenizer::validateTokenOrder(std::vector<std::string> &strings) {
+    for (auto str: strings) {
+        
     }
 
-    return result;
+    return false;
+}
+
+
+void Tokenizer::printStrings(std::vector<std::string> &strings) {
+    for (auto str: strings) {
+        std::cout << str << " ";
+    }
+
+    std::cout << std::endl;
 }
 
 bool Tokenizer::isOperator(char c) {

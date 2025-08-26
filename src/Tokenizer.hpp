@@ -16,48 +16,34 @@
 #include "RBracketToken.hpp"
 
 class Tokenizer {
+    
 public:
+    struct TokenizedExpression
+    {
+        std::vector<std::string> strings;
+        std::vector<TokenType> types;
+        std::unordered_map<int, int> bracketMap;
+    };
+
     Tokenizer();
 
     // Tokenize input string
-    std::expected<int, std::string> tokenize(std::string &input);
+    std::expected<TokenizedExpression, std::string> tokenize(std::string &input);
 
     // Print the list of tokens
-    void printTokens();
+    void printStrings(std::vector<std::string> &tokens);
 
     // Checks if the given character is a mathematical operator
     static bool isOperator(char c);
 private:
-    // Creates a number token from the input string starting at curr and returns the new index.
-    // Guarantees that the resulting number is valid.
-    // Returns the new index.
-    std::expected<int, std::string> tokenizeNumber(const std::string &input, int &curr) noexcept;
-
-    // Creates an operator token from the input string starting at curr.
-    // Gurantees that expression is well formed.
-    int tokenizeOperator(const std::string &input, const int curr);
-    //int findMatchingRightBracket(std::string &input, std::vector<int> &bracketMatch, int curr);
-
-    // Creates a function token from the input string starting at curr and returns the new index.
-    // Guarantees that expression is well formed.
-    // Returns the new index.
-    std::expected<int, std::string> tokenizeFunction(const std::string &input, int &curr);
-
-    // Creates a left bracket token from input string at curr and pushes its index onto a queue.
-    // Guarantees that expression is well formed.
-    // Returns the new index.
-    int tokenizeLeftBracket(const std::string &input, const int curr);
+    std::expected<TokenType, std::string> validateBuffer(std::string &buffer);
 
     /// @brief Converts the token vector into postfix order.
-    std::vector<std::shared_ptr<Token>> toPostFix(std::vector<std::shared_ptr<Token>> &tokens);
+    std::vector<std::shared_ptr<Term>> toPostFix(std::string &input);
 
-    std::expected<int, std::string> tokenizeRightBracket(const std::string &input, const int curr);
-
-    std::vector<std::shared_ptr<Token>> tokens;
+    std::expected<bool, std::string> validateTokenOrder(std::vector<std::string> &strings);
 
     std::queue<int> leftBrackets;
-
-    std::unordered_map<int, int> bracketMap;
 };
 
 #endif

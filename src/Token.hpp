@@ -27,8 +27,9 @@ enum TokenType {
     LBRACKET,
     RBRACKET,
     NUMBER,
-    DOTPRODUCT,
-    OPERATOR
+    OPERATOR,
+    SPACE,
+    ERROR
 };
 
 class Token {
@@ -41,8 +42,6 @@ public:
     virtual void printToken() = 0;
 
     virtual int getPrecedence() = 0;
-
-    virtual std::expected<std::unique_ptr<Node>, std::string> parseToken() = 0;
 };
 
 #endif

@@ -10,11 +10,15 @@ int main(int argc, char* argv[]) {
     Tokenizer tokenizer = Tokenizer();
 
     std::string input;
-    std::cin >> input;
+    std::getline(std::cin, input);
+    auto result = tokenizer.tokenize(input);
+    if (!result) {
+        return -1;
+    }
 
-    tokenizer.tokenize(input);
+    Tokenizer::TokenizedExpression expression = result.value();
 
-    tokenizer.printTokens();
+    tokenizer.printStrings(expression.strings);
 
 
 
