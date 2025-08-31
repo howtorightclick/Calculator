@@ -25,9 +25,3 @@ void LBracketToken::printToken() {
 int LBracketToken::getPrecedence() {
     return 0;
 }
-
-std::expected<std::unique_ptr<Node>, std::string> LBracketToken::parseToken() {
-
-
-    return nullptr;
-}

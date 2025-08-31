@@ -13,11 +13,12 @@ int main(int argc, char* argv[]) {
     std::getline(std::cin, input);
     auto result = tokenizer.tokenize(input);
     if (!result) {
+        std::cout << result.error();
         return -1;
     }
 
     Tokenizer::TokenizedExpression expression = result.value();
-
+    Tokenizer::validateTokenOrder(expression, 0, expression.length);
     tokenizer.printStrings(expression.strings);
 
 

@@ -16,8 +16,6 @@ public:
     void setRightBracket(int i);
 
     int getPrecedence();
-
-    std::expected<std::unique_ptr<Node>, std::string> parseToken();
 private:
     int rightBracket;
 };

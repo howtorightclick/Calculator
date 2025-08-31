@@ -13,10 +13,10 @@ Tokenizer::Tokenizer() {
 }
 
 std::expected<Tokenizer::TokenizedExpression, std::string> Tokenizer::tokenize(std::string &input) {
-    TokenType prev = NUMBER;
     // Read until space or operator
     Tokenizer::TokenizedExpression expression;
     std::vector<std::string> tokens;
+    expression.types.push_back(START);
     std::queue<int> leftBracketStack;
     std::string buffer;
     for (int i = 0; i < input.size(); i++) {
@@ -64,7 +64,8 @@ std::expected<Tokenizer::TokenizedExpression, std::string> Tokenizer::tokenize(s
         return std::unexpected(result.error());
     }
     expression.strings.push_back(buffer);
-
+    expression.types.push_back(END);
+    expression.length = expression.strings.size();
     return expression;
 }
 
@@ -99,12 +100,37 @@ std::expected<TokenType, std::string> Tokenizer::validateBuffer(std::string &buf
 
 }
 
-std::expected<bool, std::string> Tokenizer::validateTokenOrder(std::vector<std::string> &strings) {
-    for (auto str: strings) {
-        
+std::expected<int, std::string> Tokenizer::validateTokenOrder(Tokenizer::TokenizedExpression &expression, int start, int end) {
+    for (int i = start; i < end; i++) {
+        TokenType curr = expression.types[i];
+        if (i == start && !Tokenizer::allowedPredecessors[curr].contains(START)) {
+            return std::unexpected("Error: unexpected symbol");
+        } else if (i == end - 1 && !Tokenizer::allowedFollowers[curr].contains(END)) {
+            return std::unexpected("Error: unexpected symbol");
+        } else {
+            TokenType prev = expression.types[i - 1];
+            TokenType next = expression.types[i + 1];
+
+            if (!Tokenizer::allowedFollowers[curr].contains(next)) {
+                return std::unexpected("");
+            }
+
+            if (!Tokenizer::allowedPredecessors[curr].contains(prev)) {
+                return std::unexpected("");
+            }
+
+            if (curr == LBRACKET) {
+                auto res = validateTokenOrder(expression, i + 1, expression.bracketMap[i]);
+                if (!res) {
+                    return res;
+                } else {
+                    i = res.value();
+                }
+            }
+        }
     }
 
-    return false;
+    return end;
 }
 
 

@@ -25,6 +25,6 @@ int NumberToken::getPrecedence() {
     return -1;
 }
 
-std::expected<std::unique_ptr<Node>, std::string> NumberToken::parseToken() {
+std::unique_ptr<Node> NumberToken::parseToken() {
     return nullptr;
 }

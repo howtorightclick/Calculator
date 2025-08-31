@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "Token.hpp"
+#include "Term.hpp"
 
-class FunctionToken : public Token {
+class FunctionToken : public Term {
 public:
     FunctionToken(std::string function);
 
@@ -17,7 +17,7 @@ public:
 
     int getPrecedence();
 
-    std::expected<std::unique_ptr<Node>, std::string> parseToken();
+    std::unique_ptr<Node> parseToken();
 private:
     std::string function;
 };

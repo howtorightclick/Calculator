@@ -41,6 +41,6 @@ int OperatorToken::getPrecedence() {
     }
 }
 
-std::expected<std::unique_ptr<Node>, std::string> OperatorToken::parseToken() {
+std::unique_ptr<Node> OperatorToken::parseToken() {
     return nullptr;
 }

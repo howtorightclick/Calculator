@@ -1,9 +1,9 @@
 #ifndef NUMBER_TOKEN_HPP
 #define NUMBER_TOKEN_HPP
 
-#include "Token.hpp"
+#include "Term.hpp"
 
-class NumberToken : public Token {
+class NumberToken : public Term {
 public:
     NumberToken(float val);
 
@@ -15,7 +15,7 @@ public:
 
     int getPrecedence();
 
-    std::expected<std::unique_ptr<Node>, std::string> parseToken();
+    std::unique_ptr<Node> parseToken();
 private:
     float val;
 };

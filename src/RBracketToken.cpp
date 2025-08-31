@@ -21,8 +21,3 @@ void RBracketToken::printToken() {
 int RBracketToken::getPrecedence() {
     return 0;
 }
-
-std::expected<std::unique_ptr<Node>, std::string> RBracketToken::parseToken() {
-
-    return nullptr;
-}

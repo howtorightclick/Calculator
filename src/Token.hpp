@@ -28,8 +28,10 @@ enum TokenType {
     RBRACKET,
     NUMBER,
     OPERATOR,
-    SPACE,
-    ERROR
+    NUMTYPES,
+    ERROR,
+    START,
+    END
 };
 
 class Token {

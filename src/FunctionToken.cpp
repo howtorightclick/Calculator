@@ -23,6 +23,6 @@ int FunctionToken::getPrecedence() {
     return 4;
 }
 
-std::expected<std::unique_ptr<Node>, std::string> FunctionToken::parseToken() {
+std::unique_ptr<Node> FunctionToken::parseToken() {
     return nullptr;
 }

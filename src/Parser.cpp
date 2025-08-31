@@ -9,11 +9,11 @@ Parser::Parser() {
 }
 
 std::expected<std::unique_ptr<Node>, std::string> Parser::parseTokens(std::queue<std::unique_ptr<Node>> stack) {
-
+    return nullptr;
 }
 
 std::expected<std::unique_ptr<Node>, std::string> Parser::parseTokens(size_t end) {
-
+    return nullptr;
 }
 
 void setTokenList(std::vector<std::shared_ptr<Token>> tokens);
