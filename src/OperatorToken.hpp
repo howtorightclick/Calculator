@@ -1,9 +1,9 @@
 #ifndef OPERATOR_TOKEN_HPP
 #define OPERATOR_TOKEN_HPP
 
-#include "Term.hpp"
+#include "Token.hpp"
 
-class OperatorToken : public Term {
+class OperatorToken : public Token {
 public:
     OperatorToken(char _val, bool _unary);
 

@@ -12,8 +12,6 @@
 #include "FunctionToken.hpp"
 #include "NumberToken.hpp"
 #include "OperatorToken.hpp"
-#include "LBracketToken.hpp"
-#include "RBracketToken.hpp"
 
 class Tokenizer {
     
@@ -43,9 +41,6 @@ public:
     static std::expected<int, std::string> validateTokenOrder(TokenizedExpression &expression, int start, int end);
 private:
     std::expected<TokenType, std::string> validateBuffer(std::string &buffer);
-
-    /// @brief Converts the token vector into postfix order.
-    std::vector<std::shared_ptr<Term>> toPostFix(std::string &input);
 
     std::queue<int> leftBrackets;
 };

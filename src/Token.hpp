@@ -44,6 +44,8 @@ public:
     virtual void printToken() = 0;
 
     virtual int getPrecedence() = 0;
+
+    virtual std::unique_ptr<Node> createNode();
 };
 
 #endif

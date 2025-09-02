@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     }
 
     Tokenizer::TokenizedExpression expression = result.value();
-    Tokenizer::validateTokenOrder(expression, 0, expression.length);
+    //Tokenizer::validateTokenOrder(expression, 0, expression.length);
     tokenizer.printStrings(expression.strings);
 
 

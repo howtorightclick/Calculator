@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "Term.hpp"
+#include "Token.hpp"
 
-class FunctionToken : public Term {
+class FunctionToken : public Token {
 public:
     FunctionToken(std::string function);
 

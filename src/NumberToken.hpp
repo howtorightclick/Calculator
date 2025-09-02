@@ -1,9 +1,9 @@
 #ifndef NUMBER_TOKEN_HPP
 #define NUMBER_TOKEN_HPP
 
-#include "Term.hpp"
+#include "Token.hpp"
 
-class NumberToken : public Term {
+class NumberToken : public Token {
 public:
     NumberToken(float val);
 

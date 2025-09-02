@@ -13,26 +13,25 @@ Tokenizer::Tokenizer() {
 }
 
 std::expected<Tokenizer::TokenizedExpression, std::string> Tokenizer::tokenize(std::string &input) {
-    // Read until space or operator
     Tokenizer::TokenizedExpression expression;
     std::vector<std::string> tokens;
+
     expression.types.push_back(START);
+
     std::queue<int> leftBracketStack;
     std::string buffer;
     for (int i = 0; i < input.size(); i++) {
-
         if (input[i] == ' ' || isOperator(input[i]) || input[i] == '(' || input[i] == ')') {
-            auto result = validateBuffer(buffer);
-            if (!result) {
-                return std::unexpected(result.error());
-            }
+            if (buffer.size() != 0) {
+                auto result = validateBuffer(buffer);
+                if (!result) {
+                    return std::unexpected(result.error());
+                }
 
-            if (result.value() == ERROR) {
-                return std::unexpected("Error: unexpected symbol at " + input);
+                expression.strings.push_back(buffer);
+                expression.types.push_back(result.value());
+                buffer = "";
             }
-            expression.strings.push_back(buffer);
-            expression.types.push_back(result.value());
-            buffer = "";
 
             if (input[i] != ' ') {
                 expression.strings.push_back(std::string(1, input[i]));
@@ -44,6 +43,7 @@ std::expected<Tokenizer::TokenizedExpression, std::string> Tokenizer::tokenize(s
                 expression.types.push_back(LBRACKET);
             } else if (input[i] == ')') {
                 if (leftBracketStack.size() == 0) {
+                    std::cout << "error";
                     return std::unexpected("Error: unexpected symbol in " + input);
                 }
                 expression.bracketMap[leftBracketStack.front()] = expression.strings.size() - 1;
@@ -63,7 +63,11 @@ std::expected<Tokenizer::TokenizedExpression, std::string> Tokenizer::tokenize(s
     if (!result) {
         return std::unexpected(result.error());
     }
-    expression.strings.push_back(buffer);
+
+    if (result.value() != ERROR) {
+        expression.strings.push_back(buffer);
+    }
+
     expression.types.push_back(END);
     expression.length = expression.strings.size();
     return expression;
