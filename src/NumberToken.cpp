@@ -1,5 +1,6 @@
 #include<iostream>
 #include<memory>
+#include <queue>
 
 #include "NumberToken.hpp"
 #include "FloatNode.hpp"
@@ -13,18 +14,26 @@ NumberToken::NumberToken(float val) {
     return nullptr;
 }*/
 
-TokenType NumberToken::getType() {
+TokenType NumberToken::getType() const {
     return NUMBER;
 }
 
-void NumberToken::printToken() {
+void NumberToken::printToken() const {
     std::cout << val;
 }
 
-int NumberToken::getPrecedence() {
+int NumberToken::getPrecedence() const {
     return -1;
 }
 
-std::unique_ptr<Node> NumberToken::parseToken() {
-    return nullptr;
+std::string NumberToken::getContent() const {
+    return "";
+}
+
+float NumberToken::getVal() const {
+    return val;
+}
+
+void NumberToken::accept(Parser &parser) const {
+    parser.process(*this);
 }

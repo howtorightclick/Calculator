@@ -4,20 +4,37 @@
 #include <memory>
 #include <unordered_map>
 #include <vector>
-#include <queue>
+#include <stack>
 
 #include "Node.hpp"
-#include "Token.hpp"
-#include "Tokenizer.hpp"
+
+class Token;
+class NumberToken;
+class OperatorToken;
+class FunctionToken;
+class BracketToken;
 
 class Parser {
 public:
     Parser();
 
-    std::expected<std::unique_ptr<Node>, std::string> parseTokens(Tokenizer::TokenizedExpression expression);
+    std::unique_ptr<Node> parseTokens(std::vector<std::unique_ptr<Token>> tokens);
+
+    void process(const NumberToken &token);
+
+    void process(const OperatorToken &token);
+
+    void process(const FunctionToken &token);
+
+    void process(const BracketToken &token);
+
+    static void printBinaryTree();
 
 private:
+    void buildNodeFromStack();
 
+    std::stack<std::unique_ptr<Token>> operatorStack;
+    std::stack<std::unique_ptr<Node>> nodeStack;
 };
 
 #endif

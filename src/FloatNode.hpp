@@ -7,7 +7,9 @@ class FloatNode : public Node {
 public:
     FloatNode(float val);
 
-    float calculate();
+    float calculate() override;
+
+    void inOrderPrint(std::string &prefix, bool isLeft) const override;
     
 private:
     float val;

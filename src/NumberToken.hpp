@@ -9,13 +9,17 @@ public:
 
     //Node *toNode();
 
-    TokenType getType();
+    TokenType getType() const;
 
-    void printToken();
+    void printToken() const;
 
-    int getPrecedence();
+    int getPrecedence() const;
 
-    std::unique_ptr<Node> parseToken();
+    float getVal() const;
+
+    std::string getContent() const;
+
+    void accept(Parser &parser) const override;
 private:
     float val;
 };

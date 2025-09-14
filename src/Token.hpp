@@ -4,8 +4,9 @@
 #include <set>
 #include <memory>
 #include <expected>
+#include <stack>
 
-#include "Node.hpp"
+#include "Parser.hpp"
 
 namespace STANDARD_SYMBOLS {
     inline constexpr char OPERATORS[5] = {'+', '-', '/', '*', '^'};
@@ -37,15 +38,19 @@ enum TokenType {
 class Token {
 public:
     //virtual Node *toNode() = 0;
-    virtual ~Token() = default;
+    Token() = default;
 
-    virtual TokenType getType() = 0;
+    virtual TokenType getType() const = 0;
 
-    virtual void printToken() = 0;
+    virtual int getPrecedence() const = 0;
 
-    virtual int getPrecedence() = 0;
+    virtual std::string getContent() const = 0;
 
-    virtual std::unique_ptr<Node> createNode();
+    virtual void printToken() const = 0;
+
+    virtual void accept(Parser &parser) const = 0;
+private:
+    std::string content;
 };
 
 #endif

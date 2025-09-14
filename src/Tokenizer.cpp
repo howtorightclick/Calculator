@@ -12,11 +12,11 @@ Tokenizer::Tokenizer() {
 
 }
 
-std::expected<Tokenizer::TokenizedExpression, std::string> Tokenizer::tokenize(std::string &input) {
-    Tokenizer::TokenizedExpression expression;
-    std::vector<std::string> tokens;
+std::expected<std::vector<std::unique_ptr<Token>>, std::string> Tokenizer::tokenize(std::string &input) {
+    Tokenizer::Expression expression;
+    //std::vector<std::string> tokens;
 
-    expression.types.push_back(START);
+    std::vector<std::unique_ptr<Token>> tokens;
 
     std::queue<int> leftBracketStack;
     std::string buffer;
@@ -27,28 +27,29 @@ std::expected<Tokenizer::TokenizedExpression, std::string> Tokenizer::tokenize(s
                 if (!result) {
                     return std::unexpected(result.error());
                 }
-
-                expression.strings.push_back(buffer);
-                expression.types.push_back(result.value());
+                
+                if (result.value() == NUMBER) {
+                    tokens.push_back(std::make_unique<NumberToken>(stof(buffer)));
+                } else {
+                    tokens.push_back(std::make_unique<FunctionToken>(buffer));
+                }
                 buffer = "";
             }
 
-            if (input[i] != ' ') {
-                expression.strings.push_back(std::string(1, input[i]));
-                expression.types.push_back(OPERATOR);
+            if (input[i] != ' ' && isOperator(input[i])) {
+                tokens.push_back(std::make_unique<OperatorToken>(std::string(1, input[i]), false));
             }
 
             if (input[i] == '(') {
+                tokens.push_back(std::make_unique<BracketToken>(true));
                 leftBracketStack.push(expression.strings.size() - 1);
-                expression.types.push_back(LBRACKET);
             } else if (input[i] == ')') {
                 if (leftBracketStack.size() == 0) {
                     std::cout << "error";
                     return std::unexpected("Error: unexpected symbol in " + input);
                 }
-                expression.bracketMap[leftBracketStack.front()] = expression.strings.size() - 1;
+                tokens.push_back(std::make_unique<BracketToken>(false));
                 leftBracketStack.pop();
-                expression.types.push_back(RBRACKET);
             }
         } else {
             buffer.push_back(input[i]);
@@ -64,13 +65,12 @@ std::expected<Tokenizer::TokenizedExpression, std::string> Tokenizer::tokenize(s
         return std::unexpected(result.error());
     }
 
-    if (result.value() != ERROR) {
-        expression.strings.push_back(buffer);
+    if (result.value() == NUMBER) {
+        tokens.push_back(std::make_unique<NumberToken>(stof(buffer)));
+    } else {
+        tokens.push_back(std::make_unique<FunctionToken>(buffer));
     }
-
-    expression.types.push_back(END);
-    expression.length = expression.strings.size();
-    return expression;
+    return tokens;
 }
 
 std::expected<TokenType, std::string> Tokenizer::validateBuffer(std::string &buffer) {
@@ -104,7 +104,7 @@ std::expected<TokenType, std::string> Tokenizer::validateBuffer(std::string &buf
 
 }
 
-std::expected<int, std::string> Tokenizer::validateTokenOrder(Tokenizer::TokenizedExpression &expression, int start, int end) {
+std::expected<int, std::string> Tokenizer::validateTokenOrder(Tokenizer::Expression &expression, int start, int end) {
     for (int i = start; i < end; i++) {
         TokenType curr = expression.types[i];
         if (i == start && !Tokenizer::allowedPredecessors[curr].contains(START)) {
@@ -137,10 +137,10 @@ std::expected<int, std::string> Tokenizer::validateTokenOrder(Tokenizer::Tokeniz
     return end;
 }
 
-
-void Tokenizer::printStrings(std::vector<std::string> &strings) {
-    for (auto str: strings) {
-        std::cout << str << " ";
+void Tokenizer::printStrings(std::vector<std::unique_ptr<Token>> const &tokens) {
+    for (int i = 0; i < tokens.size(); i++) {
+        tokens[i]->printToken();
+        std::cout << " ";
     }
 
     std::cout << std::endl;

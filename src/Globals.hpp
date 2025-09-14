@@ -2,6 +2,9 @@
 #define GLOBALS_HPP
 
 #include <array>
+#include <map>
+#include <any>
+#include <string>
 
 namespace Constants {
     constexpr char OPERATORS[5] = {'+', '-', '/', '*', '^'};
@@ -18,6 +21,8 @@ namespace Constants {
         LN,
         NUM_FUNCTIONS
     };
+
+    std::map<std::string, std::any> mathFunctions;
 
     constexpr std::array FunctionMap = {"SIN"};
 }

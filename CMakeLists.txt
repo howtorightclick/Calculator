@@ -11,10 +11,9 @@ set(TARGET_SRC
     src/NumberToken.cpp
     src/FunctionToken.cpp
     src/OperatorToken.cpp
-    src/LBracketToken.cpp
-    src/RBracketToken.cpp
-    src/UnaryNode.cpp
-    src/InfixOpNode.cpp
+    src/BracketToken.cpp
+    src/FunctionNode.cpp
+    src/OperatorNode.cpp
     src/FloatNode.cpp
     src/Parser.cpp
     )
@@ -25,10 +24,9 @@ set(TARGET_H
     src/NumberToken.hpp
     src/FunctionToken.hpp
     src/OperatorToken.hpp
-    src/LBracketToken.hpp
-    src/RBracketToken.hpp
-    src/UnaryNode.hpp
-    src/InfixOpNode.hpp
+    src/BracketToken.hpp
+    src/FunctionNode.hpp
+    src/OperatorNode.hpp
     src/FloatNode.hpp
     src/Node.hpp
     src/Parser.hpp

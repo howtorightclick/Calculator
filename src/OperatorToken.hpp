@@ -5,20 +5,28 @@
 
 class OperatorToken : public Token {
 public:
-    OperatorToken(char _val, bool _unary);
+    OperatorToken(std::string _content, bool _unary);
 
    //Node *toNode();
 
-    TokenType getType();
+    TokenType getType() const;
 
-    void printToken();
+    void printToken() const;
 
-    int getPrecedence();
+    int getPrecedence() const override;
 
-    std::unique_ptr<Node> parseToken();
+    bool isRightAssociative() const;
+
+    std::string getContent() const;
+
+    std::unique_ptr<OperatorToken> clone() const;
+
+    void accept(Parser &parser) const override;
 private:
-    char val;
+
     bool isUnary;
+    int numArgs;
+    std::string content;
 };
 
 #endif

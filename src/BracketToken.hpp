@@ -1,13 +1,15 @@
-#ifndef FUNCTION_TOKEN_HPP
-#define FUNCTION_TOKEN_HPP
+#ifndef BRACKET_TOKEN_HPP
+#define BRACKET_TOKEN_HPP
 
 #include <string>
+#include <stack>
 
 #include "Token.hpp"
+#include "Node.hpp"
 
-class FunctionToken : public Token {
+class BracketToken : public Token {
 public:
-    FunctionToken(std::string function);
+    BracketToken(bool isLeft);
 
     //Node *toNode();
 
@@ -17,12 +19,12 @@ public:
 
     int getPrecedence() const;
 
-    std::unique_ptr<FunctionToken> clone() const;
+    bool isLeft() const;
 
     std::string getContent() const;
 
     void accept(Parser &parser) const override;
 private:
-    std::string function;
+    bool isLeft_;
 };
 #endif

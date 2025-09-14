@@ -4,13 +4,15 @@
 #include "Node.hpp"
 #include "OperatorToken.hpp"
 
-class InfixOpNode : public Node {
+class OperatorNode : public Node {
 public:
-    InfixOpNode(char op_);
+    OperatorNode(char op_);
 
-    InfixOpNode(char op_, std::unique_ptr<Node> a_, std::unique_ptr<Node> b_);
+    OperatorNode(char op_, std::unique_ptr<Node> a_, std::unique_ptr<Node> b_);
 
     float calculate();
+
+    void inOrderPrint(std::string &prefix, bool isLeft) const override;
 private:
     char op;
     std::unique_ptr<Node> a;

@@ -12,11 +12,12 @@
 #include "FunctionToken.hpp"
 #include "NumberToken.hpp"
 #include "OperatorToken.hpp"
+#include "BracketToken.hpp"
 
 class Tokenizer {
     
 public:
-    struct TokenizedExpression
+    struct Expression
     {
         std::vector<std::string> strings;
         std::vector<TokenType> types;
@@ -30,15 +31,15 @@ public:
     Tokenizer();
 
     // Tokenize input string
-    std::expected<TokenizedExpression, std::string> tokenize(std::string &input);
+    std::expected<std::vector<std::unique_ptr<Token>>, std::string> tokenize(std::string &input);
 
     // Print the list of tokens
-    void printStrings(std::vector<std::string> &tokens);
+    void printStrings(std::vector<std::unique_ptr<Token>> const &tokens);
 
     // Checks if the given character is a mathematical operator
     static bool isOperator(char c);
 
-    static std::expected<int, std::string> validateTokenOrder(TokenizedExpression &expression, int start, int end);
+    static std::expected<int, std::string> validateTokenOrder(Expression &expression, int start, int end);
 private:
     std::expected<TokenType, std::string> validateBuffer(std::string &buffer);
 
