@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 
+// Template specialization to handle different types.
 class Node {
 public:
     virtual float calculate() = 0;    

@@ -25,6 +25,22 @@ void OperatorNode::inOrderPrint(std::string &prefix, bool isLeft) const {
 }
 
 float OperatorNode::calculate() {
+
+    // Ensure that a and b are compatible types
+
+    switch (op)
+    {
+    case '+':
+        // Check types
+        return a->calculate() + b->calculate();
+        break;
+    case '-':
+        return a->calculate() + b->calculate();
+    
+    default:
+        break;
+    }
+
     return 0;
 }
 
